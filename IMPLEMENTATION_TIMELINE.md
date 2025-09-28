@@ -34,7 +34,7 @@
   # Dependencies
   - Windows 10/11 SDK
   - DirectX SDK
-  - WebView2 Runtime
+  - CEF (Chromium Embedded Framework)
   - V8 JavaScript Engine
   - FFmpeg (latest)
   ```
@@ -57,7 +57,7 @@
   │       ├── qt/
   │       │   ├── 8kdvd_menu.cpp    # 8KDVD HTML menu renderer
   │       │   └── hddvd_menu.cpp    # HD-DVD ACA/XPL menu renderer
-  │       └── webview2/     # WebView2 integration layer
+  │       └── cef/          # CEF integration layer
   └── lib/
       ├── 8kdvd/           # 8KDVD format libraries
       ├── hddvd/           # HD-DVD format libraries
@@ -102,17 +102,17 @@
 ### **Month 2: 8KDVD Menu System & Video Playback**
 
 #### **Week 5-6: HTML Menu Rendering**
-- [ ] **WebView2 Integration**
+- [ ] **CEF Integration**
   ```cpp
-  // modules/gui/webview2/webview2_menu.cpp
-  class WebView2MenuRenderer {
+  // modules/gui/cef/cef_menu.cpp
+  class CEFMenuRenderer {
   public:
       bool Initialize();
       bool LoadMenu(const std::string& htmlPath);
       bool ExecuteJavaScript(const std::string& script);
       void SetVideoCallback(VideoCallback* callback);
   private:
-      Microsoft::Web::WebView2::Core::CoreWebView2* m_webView;
+      CefRefPtr<CefBrowser> m_browser;
       V8JavaScriptEngine* m_jsEngine;
   };
   ```
@@ -140,7 +140,7 @@
       void OnMenuChapterJump(int chapter);
   private:
       vlc_player_t* m_player;
-      WebView2MenuRenderer* m_menuRenderer;
+      CEFMenuRenderer* m_menuRenderer;
   };
   ```
 
@@ -660,7 +660,7 @@
 
 ### **Team Structure**
 - **Lead Developer**: VLC architecture and core integration
-- **Menu Specialist**: HTML/JavaScript and WebView2 integration
+- **Menu Specialist**: HTML/JavaScript and CEF integration
 - **Format Expert**: Disc format parsing and decryption
 - **UI/UX Designer**: Modern interface design
 - **QA Engineer**: Testing and quality assurance
@@ -673,7 +673,7 @@
 - **Documentation**: Doxygen + Markdown
 
 ### **External Dependencies**
-- **WebView2**: Microsoft's web engine
+- **CEF**: Chromium Embedded Framework
 - **V8**: Google's JavaScript engine
 - **FFmpeg**: Media decoding (enhanced)
 - **DirectX**: Hardware acceleration
@@ -685,7 +685,7 @@
 
 ### **Technical Risks**
 - **VLC Integration Complexity**: Start with simple modules, build incrementally
-- **WebView2 Licensing**: Use official Microsoft distribution
+- **CEF Licensing**: BSD license, open source
 - **Performance Issues**: Continuous profiling and optimization
 - **Format Compatibility**: Extensive testing with real discs
 
