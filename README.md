@@ -63,8 +63,8 @@ This project aims to create the **ultimate hybrid optical disc player** for Wind
 - **UI Framework**: WinUI 3 or WPF
 - **Media Foundation**: For video/audio decoding
 - **DirectShow**: For legacy format support
-- **WebView2**: For HTML/XML menu rendering
-- **V8 JavaScript Engine**: For interactive menu execution
+- **CEF (Chromium Embedded Framework)**: For HTML/XML menu rendering
+- **Chromium JavaScript Engine**: For interactive menu execution
 
 ## 📊 Open Source Media Player Analysis
 
@@ -107,8 +107,8 @@ This project aims to create the **ultimate hybrid optical disc player** for Wind
 1. **Fork VLC** and create "VLC-Hybrid" branch
 2. **Add HD-DVD Support** via new demuxer and decryption modules
 3. **Implement 8KDVD Support** with custom container and menu system
-4. **Enhance Menu Rendering** with WebView2 integration
-5. **Add Interactive Features** with JavaScript execution engine
+4. **Enhance Menu Rendering** with CEF integration
+5. **Add Interactive Features** with Chromium JavaScript engine
 
 ## 🔧 Build-From-Scratch Workflow
 
@@ -119,8 +119,8 @@ This project aims to create the **ultimate hybrid optical disc player** for Wind
 ├─────────────────────────────────────────────────────────────┤
 │  UI Layer (WinUI 3)                                        │
 │  ├─ Main Window                                             │
-│  ├─ Menu Renderer (WebView2)                               │
-│  └─ JavaScript Engine (V8)                                 │
+│  ├─ Menu Renderer (CEF)                                    │
+│  └─ JavaScript Engine (Chromium)                           │
 ├─────────────────────────────────────────────────────────────┤
 │  Menu System Layer                                         │
 │  ├─ 8KDVD Menu Engine (HTML5/XML)                         │
@@ -215,7 +215,7 @@ This project aims to create the **ultimate hybrid optical disc player** for Wind
 #### **1. Menu System Unification**
 - **Challenge**: Each format uses different menu technologies
 - **Solution**: Abstract menu API with format-specific implementations
-- **Technology**: WebView2 + V8 for modern formats, custom renderers for legacy
+- **Technology**: CEF + Chromium for modern formats, custom renderers for legacy
 
 #### **2. Copy Protection Integration**
 - **Challenge**: Multiple encryption schemes (CSS, AACS, 8KDVD licensing)
