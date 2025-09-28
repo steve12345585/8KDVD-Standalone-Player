@@ -1,0 +1,21 @@
+# 8KDVD Container Parser Makefile
+
+CC = cl
+CFLAGS = /W3 /EHsc /D_WIN32_WINNT=0x0601
+
+TARGET = test_container_parser.exe
+SOURCES = test_container_parser.c
+
+all: $(TARGET)
+
+$(TARGET): $(SOURCES)
+	$(CC) $(CFLAGS) /Fe:$(TARGET) $(SOURCES)
+
+clean:
+	del /Q $(TARGET) *.obj
+
+test: $(TARGET)
+	@echo Testing 8KDVD container parser on actual disc...
+	$(TARGET) "H:\Dropbox\8KFLIKZ\8KDVD Player for windows\Procect supporting\A Town Solves A Problem 8KDVD"
+
+.PHONY: all clean test
