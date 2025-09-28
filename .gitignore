@@ -70,3 +70,9 @@ ffmpeg/
 
 # Lock files
 .~lock.*
+
+# CEF Dependencies (too large for git)
+dependencies/cef/bin/
+dependencies/cef/lib/
+dependencies/cef/resources/
+dependencies/cef/cef_binary_*/
