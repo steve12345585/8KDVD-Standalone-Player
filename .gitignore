@@ -1,0 +1,72 @@
+# 8KDVD Player for Windows - Git Ignore File
+
+# Exclude large binary folders and sample content
+8KDVD Maker Portable/
+HDDVD Disc Structure/
+HDDVD-Restore/
+Procect supporting/
+Standard Def Disc Structure/
+
+
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Large media files
+*.mp4
+*.avi
+*.mkv
+*.mpg
+*.mpeg
+*.mov
+*.wmv
+*.flv
+*.webm
+*.m4v
+*.3gp
+
+# Large image files
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+*.tiff
+*.psd
+
+# Archive files
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+
+# Documentation files that might be large
+*.pdf
+*.doc
+*.docx
+*.odt
+
+# Sample disc content (binary files)
+*.EVO
+*.IFO
+*.BUP
+*.MAP
+*.DAT
+*.MPG
+*.VCD
+*.SVD
+
+# Log files
+*.log
+*.txt
+
+# Runtime files
+runtimes/
+ffmpeg/
+
+# Lock files
+.~lock.*
