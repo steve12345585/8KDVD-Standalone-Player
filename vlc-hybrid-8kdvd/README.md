@@ -29,7 +29,7 @@
 ### Phase 1: Foundation & 8KDVD Support (Months 1-3)
 - [ ] VLC fork setup and development environment
 - [ ] 8KDVD disc detection and parsing
-- [ ] HTML menu rendering with WebView2
+- [ ] HTML menu rendering with CEF
 - [ ] VP9/Opus video/audio support
 - [ ] Certificate validation system
 
