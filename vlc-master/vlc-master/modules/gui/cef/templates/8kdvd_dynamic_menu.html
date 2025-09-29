@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8KDVD Dynamic Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .menu-container {
+            text-align: center;
+            max-width: 1200px;
+            padding: 40px;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #00ccff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(0, 204, 255, 0.5);
+        }
+        
+        .disc-title {
+            font-size: 2rem;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+        
+        .disc-info {
+            font-size: 1.2rem;
+            color: #cccccc;
+            margin-bottom: 40px;
+        }
+        
+        .menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .menu-item {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 20px 40px;
+            min-width: 400px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .menu-item:hover {
+            border-color: #00ccff;
+            background: rgba(0, 204, 255, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 204, 255, 0.3);
+        }
+        
+        .menu-item.selected {
+            border-color: #00ccff;
+            background: rgba(0, 204, 255, 0.2);
+            box-shadow: 0 0 30px rgba(0, 204, 255, 0.5);
+        }
+        
+        .menu-item-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .menu-item-description {
+            font-size: 1rem;
+            color: #cccccc;
+            opacity: 0.8;
+        }
+        
+        .menu-item-thumbnail {
+            width: 100px;
+            height: 60px;
+            background: #333;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            object-fit: cover;
+        }
+        
+        .menu-item-duration {
+            font-size: 0.9rem;
+            color: #999;
+            margin-top: 5px;
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-container fade-in">
+        <div class="logo">8KDVD</div>
+        <div class="disc-title" id="discTitle">Loading...</div>
+        <div class="disc-info" id="discInfo">Loading disc information...</div>
+        
+        <div class="menu-items" id="menuItems">
+            <!-- Dynamic menu items will be inserted here -->
+        </div>
+    </div>
+    
+    <script>
+        // 8KDVD Dynamic Menu JavaScript
+        class KDVDDynamicMenu {
+            constructor() {
+                this.discData = null;
+                this.titles = [];
+                this.selectedIndex = 0;
+                this.init();
+            }
+            
+            async init() {
+                console.log('8KDVD Dynamic Menu initializing...');
+                
+                // Load disc data from VLC
+                await this.loadDiscData();
+                
+                // Populate menu with disc data
+                this.populateMenu();
+                
+                // Set up navigation
+                this.setupNavigation();
+                
+                // Set up VLC integration
+                this.setupVLCIntegration();
+            }
+            
+            async loadDiscData() {
+                try {
+                    // Get disc data from VLC API
+                    if (window.vlc && window.vlc.getDiscData) {
+                        this.discData = await window.vlc.getDiscData();
+                        this.titles = this.discData.titles || [];
+                        console.log('Disc data loaded:', this.discData);
+                    } else {
+                        // Fallback: use sample data
+                        this.discData = {
+                            title: "8KDVD Sample Disc",
+                            version: "1.0",
+                            region: "ALL",
+                            language: "en",
+                            resolution: "7680x4320",
+                            frame_rate: 60,
+                            hdr_enabled: true,
+                            dolby_vision_enabled: true
+                        };
+                        this.titles = [
+                            {
+                                id: 1,
+                                name: "Main Feature",
+                                description: "8K Ultra High Definition Feature Film",
+                                duration: 7200,
+                                thumbnail: "thumbnails/title_1.jpg",
+                                chapters: [
+                                    { id: 1, name: "Opening Credits", start_time: 0 },
+                                    { id: 2, name: "Main Story", start_time: 300 }
+                                ]
+                            },
+                            {
+                                id: 2,
+                                name: "Behind the Scenes",
+                                description: "Making of documentary",
+                                duration: 1800,
+                                thumbnail: "thumbnails/title_2.jpg",
+                                chapters: []
+                            }
+                        ];
+                        console.log('Using sample data');
+                    }
+                } catch (error) {
+                    console.error('Failed to load disc data:', error);
+                    // Use fallback data
+                    this.loadFallbackData();
+                }
+            }
+            
+            loadFallbackData() {
+                this.discData = {
+                    title: "8KDVD Disc",
+                    version: "1.0",
+                    region: "ALL",
+                    language: "en"
+                };
+                this.titles = [
+                    {
+                        id: 1,
+                        name: "Main Title",
+                        description: "8K content",
+                        duration: 0,
+                        thumbnail: "",
+                        chapters: []
+                    }
+                ];
+            }
+            
+            populateMenu() {
+                // Update disc information
+                document.getElementById('discTitle').textContent = this.discData.title;
+                document.getElementById('discInfo').textContent = 
+                    `${this.discData.resolution || '8K'} • ${this.discData.frame_rate || 60} FPS • ${this.discData.region || 'ALL'}`;
+                
+                // Generate menu items
+                const menuItems = document.getElementById('menuItems');
+                menuItems.innerHTML = '';
+                
+                // Add title items
+                this.titles.forEach((title, index) => {
+                    const menuItem = this.createTitleMenuItem(title, index);
+                    menuItems.appendChild(menuItem);
+                });
+                
+                // Add system menu items
+                const systemItems = [
+                    { id: 'settings', name: 'Settings', description: 'Configure playback options', icon: '⚙️' },
+                    { id: 'about', name: 'About', description: 'Disc information', icon: 'ℹ️' }
+                ];
+                
+                systemItems.forEach((item, index) => {
+                    const menuItem = this.createSystemMenuItem(item, this.titles.length + index);
+                    menuItems.appendChild(menuItem);
+                });
+                
+                // Update total items count
+                this.totalItems = this.titles.length + systemItems.length;
+            }
+            
+            createTitleMenuItem(title, index) {
+                const menuItem = document.createElement('div');
+                menuItem.className = 'menu-item';
+                menuItem.dataset.action = 'play_title';
+                menuItem.dataset.titleId = title.id;
+                menuItem.dataset.index = index;
+                
+                const duration = this.formatDuration(title.duration);
+                
+                menuItem.innerHTML = `
+                    <div class="menu-item-thumbnail" style="background-image: url('${title.thumbnail}')"></div>
+                    <div class="menu-item-title">${title.name}</div>
+                    <div class="menu-item-description">${title.description}</div>
+                    <div class="menu-item-duration">${duration}</div>
+                `;
+                
+                return menuItem;
+            }
+            
+            createSystemMenuItem(item, index) {
+                const menuItem = document.createElement('div');
+                menuItem.className = 'menu-item';
+                menuItem.dataset.action = item.id;
+                menuItem.dataset.index = index;
+                
+                menuItem.innerHTML = `
+                    <div class="menu-item-title">${item.icon} ${item.name}</div>
+                    <div class="menu-item-description">${item.description}</div>
+                `;
+                
+                return menuItem;
+            }
+            
+            formatDuration(seconds) {
+                if (seconds === 0) return 'Unknown duration';
+                
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const secs = seconds % 60;
+                
+                if (hours > 0) {
+                    return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                } else {
+                    return `${minutes}:${secs.toString().padStart(2, '0')}`;
+                }
+            }
+            
+            setupNavigation() {
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    switch(e.key) {
+                        case 'ArrowUp':
+                            e.preventDefault();
+                            this.navigateUp();
+                            break;
+                        case 'ArrowDown':
+                            e.preventDefault();
+                            this.navigateDown();
+                            break;
+                        case 'Enter':
+                        case ' ':
+                            e.preventDefault();
+                            this.selectItem();
+                            break;
+                        case 'Escape':
+                            e.preventDefault();
+                            this.goBack();
+                            break;
+                    }
+                });
+                
+                // Mouse events
+                document.addEventListener('click', (e) => {
+                    const menuItem = e.target.closest('.menu-item');
+                    if (menuItem) {
+                        this.selectedIndex = parseInt(menuItem.dataset.index);
+                        this.updateSelection();
+                        this.selectItem();
+                    }
+                });
+                
+                // Mouse hover
+                document.addEventListener('mouseover', (e) => {
+                    const menuItem = e.target.closest('.menu-item');
+                    if (menuItem) {
+                        this.selectedIndex = parseInt(menuItem.dataset.index);
+                        this.updateSelection();
+                    }
+                });
+            }
+            
+            navigateUp() {
+                if (this.selectedIndex > 0) {
+                    this.selectedIndex--;
+                    this.updateSelection();
+                }
+            }
+            
+            navigateDown() {
+                if (this.selectedIndex < this.totalItems - 1) {
+                    this.selectedIndex++;
+                    this.updateSelection();
+                }
+            }
+            
+            updateSelection() {
+                document.querySelectorAll('.menu-item').forEach((item, index) => {
+                    item.classList.toggle('selected', index === this.selectedIndex);
+                });
+            }
+            
+            selectItem() {
+                const selectedItem = document.querySelector('.menu-item.selected');
+                if (selectedItem) {
+                    const action = selectedItem.dataset.action;
+                    const titleId = selectedItem.dataset.titleId;
+                    
+                    console.log('Menu item selected:', action, titleId);
+                    
+                    if (action === 'play_title' && titleId) {
+                        this.playTitle(parseInt(titleId));
+                    } else if (action === 'settings') {
+                        this.showSettings();
+                    } else if (action === 'about') {
+                        this.showAbout();
+                    }
+                }
+            }
+            
+            playTitle(titleId) {
+                console.log('Playing title:', titleId);
+                if (window.vlc && window.vlc.playTitle) {
+                    window.vlc.playTitle(titleId);
+                }
+            }
+            
+            showSettings() {
+                console.log('Showing settings');
+                if (window.vlc && window.vlc.showMenu) {
+                    window.vlc.showMenu('settings');
+                }
+            }
+            
+            showAbout() {
+                console.log('Showing about');
+                if (window.vlc && window.vlc.showMenu) {
+                    window.vlc.showMenu('about');
+                }
+            }
+            
+            goBack() {
+                console.log('Go back');
+                if (window.vlc && window.vlc.goBack) {
+                    window.vlc.goBack();
+                }
+            }
+            
+            setupVLCIntegration() {
+                // Wait for VLC API to be available
+                const checkVLC = () => {
+                    if (window.vlc) {
+                        console.log('VLC API available');
+                        return true;
+                    }
+                    return false;
+                };
+                
+                if (!checkVLC()) {
+                    const interval = setInterval(() => {
+                        if (checkVLC()) {
+                            clearInterval(interval);
+                        }
+                    }, 100);
+                }
+            }
+        }
+        
+        // Initialize dynamic menu when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new KDVDDynamicMenu();
+        });
+    </script>
+</body>
+</html>

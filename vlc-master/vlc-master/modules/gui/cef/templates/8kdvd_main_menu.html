@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8KDVD Main Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .menu-container {
+            text-align: center;
+            max-width: 1200px;
+            padding: 40px;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #00ccff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(0, 204, 255, 0.5);
+        }
+        
+        .subtitle {
+            font-size: 1.5rem;
+            color: #cccccc;
+            margin-bottom: 60px;
+        }
+        
+        .menu-items {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+        
+        .menu-item {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            padding: 20px 40px;
+            min-width: 400px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 204, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .menu-item:hover {
+            border-color: #00ccff;
+            background: rgba(0, 204, 255, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 204, 255, 0.3);
+        }
+        
+        .menu-item:hover::before {
+            left: 100%;
+        }
+        
+        .menu-item.selected {
+            border-color: #00ccff;
+            background: rgba(0, 204, 255, 0.2);
+            box-shadow: 0 0 30px rgba(0, 204, 255, 0.5);
+        }
+        
+        .menu-item-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .menu-item-description {
+            font-size: 1rem;
+            color: #cccccc;
+            opacity: 0.8;
+        }
+        
+        .menu-item-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 20% 80%, rgba(0, 204, 255, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(255, 0, 150, 0.1) 0%, transparent 50%);
+            animation: backgroundShift 20s ease-in-out infinite;
+        }
+        
+        @keyframes backgroundShift {
+            0%, 100% { transform: translateX(0) translateY(0); }
+            50% { transform: translateX(-20px) translateY(-20px); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-animation"></div>
+    
+    <div class="menu-container fade-in">
+        <div class="logo">8KDVD</div>
+        <div class="subtitle">Ultra High Definition Experience</div>
+        
+        <div class="menu-items">
+            <div class="menu-item" data-action="play_title" data-index="0">
+                <div class="menu-item-icon">▶️</div>
+                <div class="menu-item-title">Play Title</div>
+                <div class="menu-item-description">Start playing the 8KDVD content</div>
+            </div>
+            
+            <div class="menu-item" data-action="show_settings" data-index="1">
+                <div class="menu-item-icon">⚙️</div>
+                <div class="menu-item-title">Settings</div>
+                <div class="menu-item-description">Configure playback and display options</div>
+            </div>
+            
+            <div class="menu-item" data-action="show_about" data-index="2">
+                <div class="menu-item-icon">ℹ️</div>
+                <div class="menu-item-title">About</div>
+                <div class="menu-item-description">Information about this 8KDVD disc</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 8KDVD Menu JavaScript
+        class KDVDMenu {
+            constructor() {
+                this.selectedIndex = 0;
+                this.menuItems = document.querySelectorAll('.menu-item');
+                this.init();
+            }
+            
+            init() {
+                this.updateSelection();
+                this.bindEvents();
+                this.setupVLCIntegration();
+            }
+            
+            bindEvents() {
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    switch(e.key) {
+                        case 'ArrowUp':
+                            e.preventDefault();
+                            this.navigateUp();
+                            break;
+                        case 'ArrowDown':
+                            e.preventDefault();
+                            this.navigateDown();
+                            break;
+                        case 'Enter':
+                        case ' ':
+                            e.preventDefault();
+                            this.selectItem();
+                            break;
+                        case 'Escape':
+                            e.preventDefault();
+                            this.goBack();
+                            break;
+                    }
+                });
+                
+                // Mouse events
+                this.menuItems.forEach((item, index) => {
+                    item.addEventListener('click', () => {
+                        this.selectedIndex = index;
+                        this.updateSelection();
+                        this.selectItem();
+                    });
+                    
+                    item.addEventListener('mouseenter', () => {
+                        this.selectedIndex = index;
+                        this.updateSelection();
+                    });
+                });
+            }
+            
+            navigateUp() {
+                if (this.selectedIndex > 0) {
+                    this.selectedIndex--;
+                    this.updateSelection();
+                }
+            }
+            
+            navigateDown() {
+                if (this.selectedIndex < this.menuItems.length - 1) {
+                    this.selectedIndex++;
+                    this.updateSelection();
+                }
+            }
+            
+            updateSelection() {
+                this.menuItems.forEach((item, index) => {
+                    item.classList.toggle('selected', index === this.selectedIndex);
+                });
+            }
+            
+            selectItem() {
+                const selectedItem = this.menuItems[this.selectedIndex];
+                const action = selectedItem.dataset.action;
+                
+                console.log('Menu item selected:', action);
+                
+                // Call VLC API
+                if (window.vlc && window.vlc[action]) {
+                    window.vlc[action]();
+                } else {
+                    console.warn('VLC API function not available:', action);
+                }
+            }
+            
+            goBack() {
+                console.log('Go back requested');
+                if (window.vlc && window.vlc.goBack) {
+                    window.vlc.goBack();
+                }
+            }
+            
+            setupVLCIntegration() {
+                // Wait for VLC API to be available
+                const checkVLC = () => {
+                    if (window.vlc) {
+                        console.log('VLC API available');
+                        return true;
+                    }
+                    return false;
+                };
+                
+                if (!checkVLC()) {
+                    const interval = setInterval(() => {
+                        if (checkVLC()) {
+                            clearInterval(interval);
+                        }
+                    }, 100);
+                }
+            }
+        }
+        
+        // Initialize menu when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new KDVDMenu();
+        });
+    </script>
+</body>
+</html>

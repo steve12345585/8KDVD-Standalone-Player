@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8KDVD Settings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #2a2a2a 0%, #3d3d3d 100%);
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .settings-container {
+            text-align: center;
+            max-width: 1000px;
+            padding: 40px;
+        }
+        
+        .settings-title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #00ccff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(0, 204, 255, 0.5);
+        }
+        
+        .settings-subtitle {
+            font-size: 1.2rem;
+            color: #cccccc;
+            margin-bottom: 50px;
+        }
+        
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .setting-group {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .setting-group:hover {
+            border-color: #00ccff;
+            background: rgba(0, 204, 255, 0.1);
+        }
+        
+        .setting-group-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #00ccff;
+        }
+        
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .setting-label {
+            font-size: 1.1rem;
+            color: #ffffff;
+        }
+        
+        .setting-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: #555;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .toggle-switch.active {
+            background: #00ccff;
+        }
+        
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+        }
+        
+        .toggle-switch.active::after {
+            transform: translateX(30px);
+        }
+        
+        .slider {
+            width: 200px;
+            height: 8px;
+            background: #555;
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #00ccff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        .back-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #00ccff;
+            border-radius: 15px;
+            padding: 15px 30px;
+            color: #00ccff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+        
+        .back-button:hover {
+            background: #00ccff;
+            color: #000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 204, 255, 0.3);
+        }
+        
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-container fade-in">
+        <div class="settings-title">8KDVD Settings</div>
+        <div class="settings-subtitle">Configure your playback experience</div>
+        
+        <div class="settings-grid">
+            <div class="setting-group">
+                <div class="setting-group-title">🎵 Audio Settings</div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">Audio Track</div>
+                    <div class="setting-control">
+                        <select id="audioTrack" class="slider">
+                            <option value="0">Track 1</option>
+                            <option value="1">Track 2</option>
+                            <option value="2">Track 3</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">Volume</div>
+                    <div class="setting-control">
+                        <input type="range" id="volume" class="slider" min="0" max="100" value="80">
+                        <span id="volumeValue">80%</span>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">Surround Sound</div>
+                    <div class="setting-control">
+                        <div class="toggle-switch" id="surroundSound"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="setting-group">
+                <div class="setting-group-title">📺 Video Settings</div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">Resolution</div>
+                    <div class="setting-control">
+                        <select id="resolution" class="slider">
+                            <option value="7680x4320">8K (7680x4320)</option>
+                            <option value="3840x2160">4K (3840x2160)</option>
+                            <option value="1920x1080">1080p (1920x1080)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">Frame Rate</div>
+                    <div class="setting-control">
+                        <select id="frameRate" class="slider">
+                            <option value="60">60 FPS</option>
+                            <option value="30">30 FPS</option>
+                            <option value="24">24 FPS</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">HDR</div>
+                    <div class="setting-control">
+                        <div class="toggle-switch" id="hdr"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="setting-group">
+                <div class="setting-group-title">🎮 Playback Settings</div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">Auto-play</div>
+                    <div class="setting-control">
+                        <div class="toggle-switch" id="autoPlay"></div>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">Loop</div>
+                    <div class="setting-control">
+                        <div class="toggle-switch" id="loop"></div>
+                    </div>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-label">Subtitles</div>
+                    <div class="setting-control">
+                        <div class="toggle-switch" id="subtitles"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <button class="back-button" onclick="goBack()">← Back to Main Menu</button>
+    </div>
+    
+    <script>
+        // 8KDVD Settings JavaScript
+        class KDVDSettings {
+            constructor() {
+                this.init();
+            }
+            
+            init() {
+                this.bindEvents();
+                this.setupVLCIntegration();
+            }
+            
+            bindEvents() {
+                // Toggle switches
+                document.querySelectorAll('.toggle-switch').forEach(toggle => {
+                    toggle.addEventListener('click', () => {
+                        toggle.classList.toggle('active');
+                        this.updateSetting(toggle.id, toggle.classList.contains('active'));
+                    });
+                });
+                
+                // Sliders
+                document.getElementById('volume').addEventListener('input', (e) => {
+                    document.getElementById('volumeValue').textContent = e.target.value + '%';
+                    this.updateSetting('volume', e.target.value);
+                });
+                
+                // Selects
+                document.querySelectorAll('select').forEach(select => {
+                    select.addEventListener('change', (e) => {
+                        this.updateSetting(select.id, e.target.value);
+                    });
+                });
+                
+                // Keyboard navigation
+                document.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        this.goBack();
+                    }
+                });
+            }
+            
+            updateSetting(setting, value) {
+                console.log('Setting updated:', setting, '=', value);
+                
+                // Call VLC API
+                if (window.vlc && window.vlc.updateSetting) {
+                    window.vlc.updateSetting(setting, value);
+                }
+            }
+            
+            goBack() {
+                console.log('Returning to main menu');
+                if (window.vlc && window.vlc.goBack) {
+                    window.vlc.goBack();
+                }
+            }
+            
+            setupVLCIntegration() {
+                // Wait for VLC API to be available
+                const checkVLC = () => {
+                    if (window.vlc) {
+                        console.log('VLC API available for settings');
+                        return true;
+                    }
+                    return false;
+                };
+                
+                if (!checkVLC()) {
+                    const interval = setInterval(() => {
+                        if (checkVLC()) {
+                            clearInterval(interval);
+                        }
+                    }, 100);
+                }
+            }
+        }
+        
+        // Global functions
+        function goBack() {
+            if (window.kdvdSettings) {
+                window.kdvdSettings.goBack();
+            }
+        }
+        
+        // Initialize settings when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.kdvdSettings = new KDVDSettings();
+        });
+    </script>
+</body>
+</html>
