@@ -91,3 +91,5 @@ void kdvd_certificate_validator_log_info(kdvd_certificate_validator_t *validator
 void kdvd_certificate_validator_log_stats(kdvd_certificate_validator_t *validator);
 
 #endif // VLC_8KDVD_CERTIFICATE_VALIDATOR_H
+
+

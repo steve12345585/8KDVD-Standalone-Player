@@ -374,3 +374,5 @@ static int Control(input_t *input, int query, va_list args) {
             return VLC_EGENERIC;
     }
 }
+
+

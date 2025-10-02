@@ -170,3 +170,5 @@ static int Control(input_thread_t *input, int query, va_list args) {
     
     return VLC_SUCCESS;
 }
+
+

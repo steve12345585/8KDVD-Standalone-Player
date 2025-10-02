@@ -687,3 +687,5 @@ void kdvd_disc_manager_log_stats(kdvd_disc_manager_t *manager) {
     msg_Info(manager->obj, "  Average Unmount Time: %.2f us", manager->stats.average_unmount_time);
     msg_Info(manager->obj, "  Memory Usage: %u MB", manager->stats.memory_usage_mb);
 }
+
+

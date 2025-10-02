@@ -547,3 +547,5 @@ void kdvd_certificate_validator_log_stats(kdvd_certificate_validator_t *validato
     msg_Info(validator->obj, "  Average Validation Time: %.2f us", validator->stats.average_validation_time);
     msg_Info(validator->obj, "  Memory Usage: %u MB", validator->stats.memory_usage_mb);
 }
+
+

@@ -107,3 +107,5 @@ void kdvd_disc_manager_log_info(kdvd_disc_manager_t *manager);
 void kdvd_disc_manager_log_stats(kdvd_disc_manager_t *manager);
 
 #endif // VLC_8KDVD_DISC_MANAGER_H
+
+
